@@ -1,4 +1,3 @@
-import json
 import os
 
 import shortuuid
@@ -226,3 +225,4 @@ class Parse837(MainParser):
 
     def __generate_id(self):
         return int(shortuuid.ShortUUID(alphabet="0123456789").random(length=10))
+

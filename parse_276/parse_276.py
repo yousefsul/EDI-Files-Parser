@@ -125,9 +125,5 @@ class Parse276(MainParser):
             else:
                 break
 
-    # count st in 276_files file
-
-
-    # Add your logic for creating index for 276_files
     def extract_index_data(self):
         pass
