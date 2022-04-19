@@ -1,8 +1,8 @@
 import datetime
 from pymongo import MongoClient
 
-MONGO_CLIENT = "mongodb://yousef:Ys2021xch@209.151.150.58:63327/?authSource=admin&readPreference=primary&appname" \
-               "=MongoDB%20Compass&ssl=false"
+MONGO_CLIENT = "mongodb+srv://yousef:3h2rSzl0pPItpyGp@cluster0.umnlp.mongodb.net/client_2731928905_DB" \
+                              "?retryWrites=true&w=majority"
 
 
 class ConnectMongoDB:

@@ -1,4 +1,3 @@
-import json
 import os
 
 from parse_common.main_parser import MainParser
@@ -36,14 +35,14 @@ class Parse277CA(MainParser):
             i = 0
             self.extract_data()
             if self.segment.split('-')[0] == 'ST':
-                self.__count_st +=1
-                self.bulid_main_dict()
+                self.__count_st += 1
+                self.build_main_dict()
                 self.edi_parsed[self.segment]['status'] = 'pending'
-                self.__bulid_st_dict(self.edi_parsed[self.segment])
+                self.__build_st_dict(self.edi_parsed[self.segment])
             else:
-                self.bulid_main_dict()
+                self.build_main_dict()
 
-    def __bulid_se_dict(self, param):
+    def __build_se_dict(self, param):
         for i in range(len(self.edi_file_info)):
             try:
                 self.extract_data()
@@ -58,7 +57,7 @@ class Parse277CA(MainParser):
             except IndexError:
                 pass
 
-    def __bulid_st_dict(self, param):
+    def __build_st_dict(self, param):
         try:
             for i in range(len(self.edi_file_info)):
                 i = 0
@@ -66,116 +65,115 @@ class Parse277CA(MainParser):
                 if self.segment.split('-')[0] == 'BHT':
                     param[self.segment] = {}
                     self.__bht_list.append(self.data_element[2])
-                    self.bulid_data_element(param[self.segment], i)
-                self.__bulid_2000a_loop(param)
-                self.__bulid_2000b_loop(param)
-                self.__bulid_2000c_loop(param)
-                self.__bulid_2000d_loop(param)
-                self.__bulid_se_dict(param)
+                    self.build_data_element(param[self.segment], i)
+                self.__build_2000a_loop(param)
+                self.__build_2000b_loop(param)
+                self.__build_2000c_loop(param)
+                self.__build_2000d_loop(param)
+                self.__build_se_dict(param)
                 break
         except IndexError:
             pass
 
-    def __bulid_2000a_loop(self, param):
+    def __build_2000a_loop(self, param):
         param['2000A'] = {}
         self.extract_data()
         param['2000A'][self.segment] = {}
-        self.bulid_data_element(param['2000A'][self.segment], 0)
-        self.__bulid_2100a_loop(param['2000A'])
+        self.build_data_element(param['2000A'][self.segment], 0)
+        self.__build_2100a_loop(param['2000A'])
 
-    def __bulid_2100a_loop(self, param):
+    def __build_2100a_loop(self, param):
         param['2100A'] = {}
         self.extract_data()
         param['2100A'][self.segment] = {}
-        self.bulid_data_element(param['2100A'][self.segment], 0)
-        self.__bulid_2200a_loop(param['2100A'])
+        self.build_data_element(param['2100A'][self.segment], 0)
+        self.__build_2200a_loop(param['2100A'])
 
-    def __bulid_2200a_loop(self, param):
+    def __build_2200a_loop(self, param):
         param['2200A'] = {}
         for i in range(len(self.edi_file_info)):
             i = 0
             self.extract_data()
             if self.segment.split('-')[0] != 'HL':
                 param['2200A'][self.segment] = {}
-                self.bulid_data_element(param['2200A'][self.segment], i)
+                self.build_data_element(param['2200A'][self.segment], i)
             else:
                 break
 
-    def __bulid_2000b_loop(self, param):
+    def __build_2000b_loop(self, param):
         param['2000B'] = {}
         self.extract_data()
         param['2000B'][self.segment] = {}
-        self.bulid_data_element(param['2000B'][self.segment], 0)
-        self.__bulid_2100b_loop(param['2000B'])
+        self.build_data_element(param['2000B'][self.segment], 0)
+        self.__build_2100b_loop(param['2000B'])
 
-    def __bulid_2100b_loop(self, param):
+    def __build_2100b_loop(self, param):
         param['2100B'] = {}
         self.extract_data()
         param['2100B'][self.segment] = {}
-        self.bulid_data_element(param['2100B'][self.segment], 0)
-        self.__bulid_2200b_loop(param['2100B'])
+        self.build_data_element(param['2100B'][self.segment], 0)
+        self.__build_2200b_loop(param['2100B'])
 
-    def __bulid_2200b_loop(self, param):
+    def __build_2200b_loop(self, param):
         param['2200B'] = {}
         for i in range(len(self.edi_file_info)):
             i = 0
             self.extract_data()
             if self.segment.split('-')[0] != 'HL':
                 param['2200B'][self.segment] = {}
-                self.bulid_data_element(param['2200B'][self.segment], i)
+                self.build_data_element(param['2200B'][self.segment], i)
             else:
                 break
 
-    def __bulid_2000c_loop(self, param):
+    def __build_2000c_loop(self, param):
         param['2000C'] = {}
         self.extract_data()
         param['2000C'][self.segment] = {}
-        self.bulid_data_element(param['2000C'][self.segment], 0)
-        self.__bulid_2100c_loop(param['2000C'])
+        self.build_data_element(param['2000C'][self.segment], 0)
+        self.__build_2100c_loop(param['2000C'])
 
-    def __bulid_2100c_loop(self, param):
+    def __build_2100c_loop(self, param):
         param['2100C'] = {}
         self.extract_data()
         param['2100C'][self.segment] = {}
-        self.bulid_data_element(param['2100C'][self.segment], 0)
-        self.__bulid_2200c_loop(param['2100C'])
+        self.build_data_element(param['2100C'][self.segment], 0)
+        self.__build_2200c_loop(param['2100C'])
 
-    def __bulid_2200c_loop(self, param):
+    def __build_2200c_loop(self, param):
         param['2200C'] = {}
         for i in range(len(self.edi_file_info)):
             i = 0
             self.extract_data()
             if self.segment.split('-')[0] != 'HL':
                 param['2200C'][self.segment] = {}
-                self.bulid_data_element(param['2200C'][self.segment], i)
+                self.build_data_element(param['2200C'][self.segment], i)
             else:
                 break
 
-    def __bulid_2000d_loop(self, param):
+    def __build_2000d_loop(self, param):
         param['2000D'] = {}
         self.extract_data()
         param['2000D'][self.segment] = {}
-        self.bulid_data_element(param['2000D'][self.segment], 0)
-        self.__bulid_2100d_loop(param['2000D'])
+        self.build_data_element(param['2000D'][self.segment], 0)
+        self.__build_2100d_loop(param['2000D'])
 
-    def __bulid_2100d_loop(self, param):
+    def __build_2100d_loop(self, param):
         param['2100D'] = {}
         self.extract_data()
         param['2100D'][self.segment] = {}
-        self.bulid_data_element(param['2100D'][self.segment], 0)
-        self.__bulid_2200d_loop(param['2100D'])
+        self.build_data_element(param['2100D'][self.segment], 0)
+        self.__build_2200d_loop(param['2100D'])
 
-    def __bulid_2200d_loop(self, param):
+    def __build_2200d_loop(self, param):
         param['2200D'] = {}
         for i in range(len(self.edi_file_info)):
             i = 0
             self.extract_data()
             if self.segment.split('-')[0] != 'SE':
                 param['2200D'][self.segment] = {}
-                self.bulid_data_element(param['2200D'][self.segment], i)
+                self.build_data_element(param['2200D'][self.segment], i)
             else:
                 break
-
 
     def extract_index_data(self):
         for data in self.edi_parsed:

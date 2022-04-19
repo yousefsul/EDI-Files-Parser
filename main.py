@@ -5,8 +5,10 @@ import shutil
 from db_connection.connectMongoDB import ConnectMongoDB
 from parse_276.parse_276 import Parse276
 from parse_277CA.parse_277ca import Parse277CA
+from parse_835.parse_835 import Parse835
 from parse_837.parse_837 import Parse837
 from parse_999.parse_999 import Parse999
+
 
 if __name__ == '__main__':
     edi_files = glob.glob('edi_files/*.*')
@@ -52,4 +54,10 @@ if __name__ == '__main__':
             print(parse277ca.extract_index_data())
             # shutil.move(edi_file, 'processed_edi_files/277ca_files/')
 
-
+        if edi_file.split('.')[-1] == '835':
+            parse835 = Parse835(edi_file)
+            # print(json.dumps(parse835.edi_parsed, indent=4))
+            connection = ConnectMongoDB()
+            connection.connect_edi_collection('835_dict_coll')
+            connection.insert_edi_collection(parse835.edi_parsed)
+            # shutil.move(edi_file, 'processed_edi_files/835_files/')

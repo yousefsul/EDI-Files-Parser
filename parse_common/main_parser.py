@@ -1,4 +1,10 @@
 import datetime
+import inspect
+
+from application.ConnectMongoDB import ConnectMongoDB
+from bson import ObjectId
+from parse_835.specification835 import Specification835
+from application.ConnectMongoDB import ConnectMongoDB
 
 
 class MainParser:
@@ -10,6 +16,9 @@ class MainParser:
         self.time = datetime.datetime.now().time().strftime("%H:%M:%S")
         self.date = datetime.datetime.now().date().strftime("%Y%m%d")
         self.edi_parsed = {}
+        self.__connection = ConnectMongoDB('devDB')
+        self.__connection.connect_to_collection('parserConfig')
+        self.__parser_config = self.__connection.find_from_collection()
         with open(self.edi_file, 'r') as edi:
             self.edi_file_info = edi.read().strip('~').split('~')
 
@@ -34,17 +43,19 @@ class MainParser:
     def get_segment(self):
         return self.data_element.pop(0)
 
-    def bulid_main_dict(self):
+    def build_main_dict(self, call_specification=False):
         self.edi_parsed[self.segment] = {}
-        self.bulid_data_element(self.edi_parsed[self.segment], 0)
+        self.build_data_element(self.edi_parsed[self.segment], 0, call_specification=call_specification)
 
-    def bulid_data_element(self, param, index):
-        self.count = 1
-        for self.data in self.data_element:
-            data_element_count = '{:02}'.format(self.count)
-            param[data_element_count] = self.data
-            self.count += 1
-        self.pop_element(index)
+    def build_data_element(self, param, index, loop='', call_specification=False):
+        if not call_specification:
+            for self.data in self.data_element:
+                data_element_count = '{:02}'.format(self.count)
+                param[data_element_count] = self.data
+                self.count += 1
+            self.pop_element(index)
+        else:
+            self.__specification835_case(param, index, loop)
 
     def pop_element(self, index):
         if self.edi_file_info:
@@ -52,4 +63,30 @@ class MainParser:
 
     def extract_index_data(self):
         pass
-    # ISA GS GE IEA
+
+    def __specification835_case(self, param, index, loop):
+        self.count = 1
+        self.__res_specification_id = None
+        self.__res_specification = None
+        for self.data in self.data_element:
+            data_element_count = '{:02}'.format(self.count)
+            if self.count == 1:
+                self.__specification = Specification835(loop, self.data, self.segment, self.__parser_config)
+                self.__res_specification_id = (self.__specification.get_id())
+                # self.__attrs = (getattr(self.__specification, name) for name in dir(self.__specification))
+                # self.__methods = filter(inspect.ismethod, self.__attrs)
+                # for self.__method in self.__methods:
+                #     try:
+                #         self.__res_specification = self.__method()
+                #         if self.__res_specification is None:
+                #             pass
+                #         else:
+                #             self.__res_specification_id = int(self.__res_specification.get('id'))
+                #             break
+                #     except TypeError:
+                #         pass
+            param[str(self.__res_specification_id) + '_' + data_element_count] = self.data
+            self.count += 1
+            if self.__res_specification_id:
+                self.__res_specification_id = int(self.__res_specification_id) + 1
+        self.pop_element(index)

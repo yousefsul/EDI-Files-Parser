@@ -1,4 +1,3 @@
-import json
 import os
 
 from parse_common.main_parser import MainParser
@@ -36,16 +35,16 @@ class Parse999(MainParser):
             i = 0
             self.extract_data()
             if self.segment.split('-')[0] == 'AK1':
-                self.bulid_main_dict()
-                self.__bulid_ak9_dict(self.edi_parsed[self.segment])
+                self.build_main_dict()
+                self.__build_ak9_dict(self.edi_parsed[self.segment])
             elif self.segment.split('-')[0] == 'AK2':
-                self.bulid_main_dict()
+                self.build_main_dict()
                 self.edi_parsed[self.segment]['loop_name'] = loop_2000
-                self.__bulid_ak2_dict(self.edi_parsed[self.segment])
+                self.__build_ak2_dict(self.edi_parsed[self.segment])
             else:
-                self.bulid_main_dict()
+                self.build_main_dict()
 
-    def __bulid_ak9_dict(self, param):
+    def __build_ak9_dict(self, param):
         for i in range(len(self.edi_file_info)):
             try:
                 if self.edi_file_info[i].split('*')[0] == 'AK9':
@@ -63,53 +62,53 @@ class Parse999(MainParser):
             except IndexError:
                 pass
 
-    def __bulid_ak2_dict(self, param):
+    def __build_ak2_dict(self, param):
         for i in range(len(self.edi_file_info)):
             i = 0
             try:
                 if self.edi_file_info[i].split('*')[0] == 'IK3':
                     self.extract_data()
                     param[self.segment] = {}
-                    self.bulid_data_element(param[self.segment], 0)
+                    self.build_data_element(param[self.segment], 0)
                     param[self.segment]['loop_name'] = loop_2100
-                    self.__bulid_ik3_dict(param[self.segment])
+                    self.__build_ik3_dict(param[self.segment])
 
                 if self.edi_file_info[i].split('*')[0] == 'IK5':
                     self.extract_data()
                     param[self.segment] = {}
-                    self.bulid_data_element(param[self.segment], 0)
+                    self.build_data_element(param[self.segment], 0)
                     break
             except IndexError:
                 pass
 
-    def __bulid_ik3_dict(self, param):
+    def __build_ik3_dict(self, param):
         for i in range(len(self.edi_file_info)):
             i = 0
             try:
                 if self.edi_file_info[i].split('*')[0] == 'CTX':
                     self.extract_data()
                     param[self.segment] = {}
-                    self.bulid_data_element(param[self.segment], 0)
+                    self.build_data_element(param[self.segment], 0)
 
                 elif self.edi_file_info[i].split('*')[0] == 'IK4':
                     self.extract_data()
                     param[self.segment] = {}
-                    self.bulid_data_element(param[self.segment], 0)
+                    self.build_data_element(param[self.segment], 0)
                     param[self.segment]['loop_name'] = loop_2110
-                    self.__bulid_ik4_dict(param[self.segment])
+                    self.__build_ik4_dict(param[self.segment])
                 else:
                     break
             except IndexError:
                 pass
 
-    def __bulid_ik4_dict(self, param):
+    def __build_ik4_dict(self, param):
         for i in range(len(self.edi_file_info)):
             i = 0
             try:
                 if self.edi_file_info[i].split('*')[0] == 'CTX':
                     self.extract_data()
                     param[self.segment] = {}
-                    self.bulid_data_element(param[self.segment], 0)
+                    self.build_data_element(param[self.segment], 0)
             except IndexError:
                 pass
 
